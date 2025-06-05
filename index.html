@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Twitch Прозрачный Чат</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        #chat {
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            color: white;
+            padding: 10px;
+            text-shadow:
+                -1px -1px 0 #000,
+                 1px -1px 0 #000,
+                -1px  1px 0 #000,
+                 1px  1px 0 #000;
+        }
+
+        .message {
+            margin-bottom: 8px;
+            animation: fadeOut 30s forwards;
+        }
+
+        @keyframes fadeOut {
+            0%   { opacity: 1; }
+            90%  { opacity: 1; }
+            100% { opacity: 0; height: 0; margin: 0; padding: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div id="chat"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/tmi.js@1.8.5/dist/tmi.min.js"></script>
+    <script>
+        const client = new tmi.Client({
+            channels: ['mixaganja001']
+        });
+
+        const chatContainer = document.getElementById('chat');
+
+        client.connect();
+
+        client.on('message', (channel, tags, message, self) => {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message';
+            msgDiv.innerHTML = `<strong>${tags['display-name']}:</strong> ${message}`;
+            chatContainer.appendChild(msgDiv);
+        });
+    </script>
+</body>
+</html>
